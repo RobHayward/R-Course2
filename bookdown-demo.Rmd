@@ -1,0 +1,280 @@
+--- 
+title: "R-Course2"
+author: "Rob Hayward"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: rstudio/bookdown-demo
+description: "This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook."
+---
+
+# Index
+
+
+<!--chapter:end:index.Rmd-->
+
+# Introduction {#intro}
+
+R is an open-source statistical programming language.  It is available from the following website: [R-Cran](http://www.r-project.org/). You should install R on you laptop.  For us it is probably best to use the [following link](http://www.stats.bris.ac.uk/R/).  You can also install [R-Studio](https://www.rstudio.com/) which is an Integrated Development Environment (IDE) for R. 
+
+##Competitors
+
+R is one of the main programmable statistical languages.  Others include:
+* Stata:  Use in academic econometrics. This is not open source.
+* Matlab:  Used extensively in academic finance.  It is not open-source.  There is an open-source clone called *Octave*.  It can be downloaded [here.](https://www.gnu.org/software/octave/)
+* Python: Computer Language for statistical programming.  
+* Julia:  New language that is faster than R
+* C++:  Programming language.  Underneath R is C++ in some cases. 
+
+##Advantages of using R
+The main advantages of using an open-source statistical programming languages like R are:
+* It can be used by anyone for no cost.  Your model will not depend on the next institution having the same software licence
+* Programming language will encourage *reproducible research*
+
+Reproducible Research means that results can be easily replicated.  This means
+* Mistakes are less likely to happen than would be the case with *copy and paste*
+* Mistakes can be more swiftly identified
+* Changes to data or research methods are easier to make
+
+##Additional Information
+Some additional information on R, R-Studio and Reproducible Research 
+* [LSE commentary on Reinhart and Rogoff](http://blogs.lse.ac.uk/impactofsocialsciences/2013/10/23/open-data-in-economics-the-basis-of-reproducible-research/)
+
+<!--chapter:end:01-Intro.Rmd-->
+
+# First R
+
+##Introduction
+All the regular mathematical operations can be carried out. 
+```{r, eval=FALSE}
+
+4 + 5
+4 * 5
+4 / 5
+4^5
+
+sqrt(5)
+log(5)
+
+test <- 2*3
+test
+
+test = 2/3
+test
+```
+
+**Practice**
+
+* Calculate the average of 2, 5, 6, 8, 9, 15, 1, 3
+* Calculate 10405 10222 as a percentage change
+
+
+## Objects
+R uses objects. The main objects are:
+
+* numeric
+* character
+* logical 
+* vector
+* data frame
+
+
+When things go wrong, it is often the case that you are to something impossible with that object.  For example, adding up characters. 
+
+
+###Character
+For an example of character
+```{r}
+a <- "My name"
+a
+```
+
+**Practice**
+
+* Assign you first and last name to the objects ``a`` and ``b``
+* Add ``a`` to ``b``
+
+###Logical (boolean,  true or false)
+```{r}
+1 == 1
+
+1 == 2 
+
+1 & 2 == 1
+
+1 | 2 == 1
+```
+
+**Practice**
+
+* Test ``Myname`` is equal to "Rob Hayward"
+
+
+## Vectors and matrices
+Strings or numerics can be concatenated or combined to form a vector or matrix
+```{r}  
+mynumbers <- c(3,5,6,7,9)
+mynumbers
+mynumbers <- c(1:10)
+mynumbers
+```
+To create a sequence, use the command sequence
+```{r}
+a <- seq(0.5,2.5, length=100)
+a
+b <- seq(1,10,1)
+b
+mynumbers <- 1:12
+m <-matrix(mynumbers, nrow=4)
+m
+```
+
+Individual components of a vector, matrix or data.frame can be identifies by using square brackets and a pair of numbers with the first equal to the row and the second equal to column.  You only need the first number for a vector. 
+
+```{r}
+A <- c(1, 2, 6, 8, 10)
+B <- c(55, 56, 60, 20, 18)
+C <- data.frame(A, B)
+C[3, 2]
+C$A
+```
+
+As you can see, a ``$`` can also be used to identify a column by `name'. 
+
+**Practice**
+
+* Assign a two-by-two matrix with the numbers from 1 to 4 to the letter ``c``
+* Make ``Mynumber`` equal to the bottom left corner
+* Make ``Mysecondnumber`` equal to the top right corner
+* Assign a two-by-two matrix with the numbers from 5 to 8 to the letter ``d``
+* Multiply ``c`` and ``d``
+
+
+Matrices and vectors can only contain one object. Try the previous exercise with the ``d`` matrix changes to the sequence ``a, b, c, d``. 
+
+Data-frames can group together vectors or various class.  These will probably be the most useful for us as we want time series with dates and integers. 
+
+
+##Plotting
+The plot function will allow you to create graphs with the data that you have. 
+```{r, fig.height=4}
+x<-seq(-pi,pi,length=10)
+y<-sin(x)
+plot(x,y)
+lines(x,y)
+```
+If you change the length of the x variable to 100 you will get a smoother line. 
+```{r, fig.height=4}
+x<-seq(-pi,pi,length=100)
+y<-sin(x)
+plot(x,y)
+lines(x,y)
+```
+```{r, fig.height=4}
+z<-rnorm(100)
+hist(z, prob=TRUE)
+mu<-mean(z)
+sig<-sd(z)
+x<-seq(-4,4,length=500)
+y<-dnorm(x,mu,sig)
+lines(x,y, col='red')
+```
+
+##Input data
+By far the easiest way to input data is to read the data from a csv file.  There are packages for reading from excel and from other databases that we will look at later. 
+
+```{r}
+da <- read.csv('./Data/bac.csv')
+head(da)
+str(da)
+```
+It is important to make sure that the variables in the data.frame of of the correct class.  In this case, the ``Date`` series (first column) is a ``factor``.  We need to change it to date. 
+
+```{r}
+da$Date <- as.Date(da$Date, format = "%d/%m/%Y")
+str(da)
+```
+
+**Practice**
+
+* Go to Yahoo finance and download data for Ford (F) from January 2000 to December 2017
+* Save the csv file to the desktop and import into R
+* Plot the Closing price
+* Beautify the plot.
+
+
+<!--chapter:end:02-FirstR.Rmd-->
+
+--- 
+title: "R Course"
+author: "Rob Hayward"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: robhayward/R-Course2
+description: "This is a practice at the R Course"
+---
+
+# Prerequisites
+
+Placeholder
+
+
+
+<!--chapter:end:index.Rmd-->
+
+# Introduction {#intro}
+
+========================================================
+R is an open-source statistical programming language.  It is available from the following website: [R-Cran](http://www.r-project.org/). You should install R on you laptop.  For us it is probably best to use the [following link](http://www.stats.bris.ac.uk/R/).  You can also install [R-Studio](https://www.rstudio.com/) which is an Integrated Development Environment (IDE) for R. 
+
+Competitors
+
+----------------------------------------------------------
+R is one of the main programmable statistical languages.  Others include:
+* Stata:  Use in academic econometrics. This is not open source.
+* Matlab:  Used extensively in academic finance.  It is not open-source.  There is an open-source clone called *Octave*.  It can be downloaded [here.](https://www.gnu.org/software/octave/)
+* Python: Computer Language for statistical programming.  
+* Julia:  New language that is faster than R
+* C++:  Programming language.  Underneath R is C++ in some cases. 
+
+Advantages of using R
+------------------------------------------------------------
+The main advantages of using an open-source statistical programming languages like R are:
+* It can be used by anyone for no cost.  Your model will not depend on the next institution having the same software licence
+* Programming language will encourage *reproducible research*
+
+Reproducible Research
+--------------------------------------------------------------
+Reproducible Research means that results can be easily replicated.  This means
+* Mistakes are less likely to happen than would be the case with *copy and paste*
+* Mistakes can be more swiftly identified
+* Changes to data or research methods are easier to make
+
+Additional Information
+---------------------------------------------------------
+Some additional information on R, R-Studio and Reproducible Research 
+* [LSE commentary on Reinhart and Rogoff](http://blogs.lse.ac.uk/impactofsocialsciences/2013/10/23/open-data-in-economics-the-basis-of-reproducible-research/)
+
+<!--chapter:end:01-intro.Rmd-->
+
+
+# First R
+
+Placeholder
+
+
+
+<!--chapter:end:02-literature.Rmd-->
+
+
+<!--chapter:end:R-Course2.Rmd-->
+
